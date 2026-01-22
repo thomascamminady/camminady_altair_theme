@@ -1,13 +1,26 @@
 # camminady_altair_theme
 
-## Info
-Find this repository on [Github](https://github.com/thomascamminady/camminady_altair_theme) or check out the [documentation](https://thomascamminady.github.io/camminady_altair_theme).
+A minimal Altair theme.
 
-## Development
-Set up the full project by running `make`.
+## Installation
 
-## Documentation
-Go to `Settings->Pages` and set `Source` (under `Build and deployment`) to `Github Actions`.
+```bash
+pip install camminady_altair_theme
+```
 
-## Credits
-This package was created with [`cookiecutter`](https://github.com/audreyr/cookiecutter) and [`thomascamminady/cookiecutter-pypackage`](https://github.com/thomascamminady/cookiecutter-pypackage), a fork of [`audreyr/cookiecutter-pypackage`](https://github.com/audreyr/cookiecutter-pypackage).
+## Usage
+
+```python
+import altair as alt
+from camminady_altair_theme import camminady
+
+alt.theme.enable("camminady")
+```
+
+## Examples
+
+A simple chart.
+![Single Chart](assets/single_chart.png)
+
+And a faceted version.
+![Facet Chart](assets/facet_chart.png)

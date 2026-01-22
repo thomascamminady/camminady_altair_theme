@@ -5,12 +5,12 @@ import altair as alt
 
 @dataclass
 class Config:
-    primary_color: str = "dimgray"
-    secondaray_color: str = "gray"
+    color_primary: str = "dimgray"
+    color_secondary: str = "gray"
     font_weight: str = "normal"
-    small_font_size: int = 12
-    medium_font_size: int = 14
-    large_font_size: int = 20
+    size_small: int = 12
+    size_medium: int = 14
+    size_large: int = 20
     height: int = 400
     width: int = 800
     spacing_facet: int = 40
@@ -20,25 +20,25 @@ class Config:
 config = Config()
 
 
-# @alt.theme.register("camminady", enable=True)
+@alt.theme.register("camminady", enable=True)
 def camminady() -> alt.theme.ThemeConfig:
     return {
         "config": {
             "text": {
-                "color": config.primary_color,
-                "fontSize": config.small_font_size,
+                "color": config.color_primary,
+                "fontSize": config.size_small,
             },
             "title": {
                 "anchor": "middle",
                 "fontWeight": config.font_weight,
-                "fontSize": config.large_font_size,
-                "color": config.primary_color,
+                "fontSize": config.size_large,
+                "color": config.color_primary,
             },
             "header": {
-                "titleFontSize": config.large_font_size,
-                "labelFontSize": config.medium_font_size,
-                "titleColor": config.primary_color,
-                "labelColor": config.primary_color,
+                "titleFontSize": config.size_large,
+                "labelFontSize": config.size_medium,
+                "titleColor": config.color_primary,
+                "labelColor": config.color_primary,
                 "titleFontWeight": config.font_weight,
                 "labelFontWeight": config.font_weight,
             },
@@ -57,17 +57,17 @@ def camminady() -> alt.theme.ThemeConfig:
             },
             "headerRow": (
                 subplotheader := {
-                    "labelColor": config.secondaray_color,
-                    "labelFontSize": config.small_font_size,
-                    "titleColor": config.primary_color,
-                    "titleFontSize": config.medium_font_size,
+                    "labelColor": config.color_secondary,
+                    "labelFontSize": config.size_small,
+                    "titleColor": config.color_primary,
+                    "titleFontSize": config.size_medium,
                 }
             ),
             "headerFacet": subplotheader,
             "headerColumn": subplotheader,
             "axis": {
                 "domain": True,
-                "domainColor": config.secondaray_color,
+                "domainColor": config.color_secondary,
                 "domainWidth": 1,
                 "gridWidth": 1,
                 "labelAngle": 0,
@@ -76,11 +76,11 @@ def camminady() -> alt.theme.ThemeConfig:
                 "gridDash": [2, 4],
                 "titleFontWeight": config.font_weight,
                 "labelFontWeight": config.font_weight,
-                "titleFontSize": config.medium_font_size,
-                "labelFontSize": config.small_font_size,
-                "titleColor": config.primary_color,
-                "labelColor": config.secondaray_color,
-                "tickColor": config.secondaray_color,
+                "titleFontSize": config.size_medium,
+                "labelFontSize": config.size_small,
+                "titleColor": config.color_primary,
+                "labelColor": config.color_secondary,
+                "tickColor": config.color_secondary,
             },
             "axisX": {
                 "titleAnchor": "end",
@@ -96,11 +96,11 @@ def camminady() -> alt.theme.ThemeConfig:
             "legend": {
                 "titleFontWeight": config.font_weight,
                 "labelFontWeight": config.font_weight,
-                "titleFontSize": config.medium_font_size,
-                "labelFontSize": config.small_font_size,
+                "titleFontSize": config.size_medium,
+                "labelFontSize": config.size_small,
                 "labelLimit": 0,
-                "titleColor": config.primary_color,
-                "labelColor": config.primary_color,
+                "titleColor": config.color_primary,
+                "labelColor": config.color_primary,
             },
         }
     }

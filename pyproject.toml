@@ -28,10 +28,15 @@ dev = [
     "ruff>=0.14.3",
     "ty>=0.0.1a25",
     "vega-datasets>=0.9.0",
+    "vl-convert-python>=1.9.0.post1",
 ]
 docs = [
     "pdoc>=14.0.0",
 ]
+
+[project.entry-points.'altair.vegalite.v6.theme']
+camminady = "camminady_altair_theme.theme:camminady"
+
 
 [tool.pylint.MASTER]
 disable=[
