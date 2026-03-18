@@ -11,11 +11,10 @@ pip install camminady_altair_theme
 ## Usage
 
 ```python
-import altair as alt
-from camminady_altair_theme import camminady
-
-alt.theme.enable("camminady")
+import camminady_altair_theme  # registers and enables the theme automatically
 ```
+
+The theme is registered with `enable=True`, so importing the package is all you need — no `alt.theme.enable()` call required and no linter `# noqa` comments.
 
 ## Examples
 
