@@ -39,6 +39,9 @@ camminady = "camminady_altair_theme.theme:camminady"
 camminady_dark = "camminady_altair_theme.theme:camminady_dark"
 
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.pylint.MASTER]
 disable=[
     "C0114", # missing-module-docstring
