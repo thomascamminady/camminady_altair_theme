@@ -41,6 +41,7 @@ class Config:
     width: int = 800
     spacing_facet: int = 40
     spacing_concat: int = 40
+    y_title_offset: int = 15
 
 
 config = Config()
@@ -79,6 +80,11 @@ def build_theme(c: Config) -> ThemeConfig:
         "labelFontSize": c.size_small,
         "labelFontWeight": c.font_weight,
     }
+    # Column headers are placed relative to the plot area and would overlap
+    # the horizontal y-axis title above it; lift them above that title.
+    header_top: HeaderConfigKwds = {
+        "labelPadding": c.y_title_offset + c.size_medium,
+    }
     title: TitleConfigKwds = {
         "anchor": "middle",
         "color": c.color_primary,
@@ -92,7 +98,6 @@ def build_theme(c: Config) -> ThemeConfig:
         "gridCap": "round",
         "gridDash": [2, 4],
         "gridWidth": 1,
-        "labelAngle": 0,
         "labelColor": c.color_secondary,
         "labelFontSize": c.size_small,
         "labelFontWeight": c.font_weight,
@@ -102,22 +107,38 @@ def build_theme(c: Config) -> ThemeConfig:
         "titleFontSize": c.size_medium,
         "titleFontWeight": c.font_weight,
     }
+    # Axis titles sit at the "end" of their axis: the x title below the
+    # right end of the x axis, the y title horizontally above the y axis.
+    # They are aligned so that they never extend beyond the plot area, where
+    # they would collide with legends or grow the chart outwards.
     axis_x: AxisConfigKwds = {
+        # Horizontal labels also for discrete x axes (Vega-Lite rotates them
+        # by default). Only set for x: on y axes a labelAngle makes
+        # Vega-Lite right-align the labels of right-oriented axes, which
+        # draws them over the ticks and into the plot.
+        "labelAngle": 0,
         "titleAnchor": "end",
-        "titleAlign": "center",
+        "titleAlign": "right",
     }
     axis_y: AxisConfigKwds = {
-        "titleAlign": "center",
+        "titleAlign": "left",
         "titleAnchor": "end",
         "titleAngle": 0,
+        "titleBaseline": "bottom",
         "titleX": 0,
-        "titleY": -15,
+        "titleY": -c.y_title_offset,
+    }
+    axis_right: AxisConfigKwds = {
+        "titleAlign": "right",
     }
     legend: LegendConfigKwds = {
         "labelColor": c.color_primary,
         "labelFontSize": c.size_small,
         "labelFontWeight": c.font_weight,
         "labelLimit": 0,
+        # Legends with orient="top" are placed relative to the plot area and
+        # ignore the y-axis title above it; offset them past that title.
+        "offset": c.y_title_offset + c.size_medium + 5,
         "titleColor": c.color_primary,
         "titleFontSize": c.size_medium,
         "titleFontWeight": c.font_weight,
@@ -126,9 +147,12 @@ def build_theme(c: Config) -> ThemeConfig:
         "axis": axis,
         "axisX": axis_x,
         "axisY": axis_y,
+        "axisRight": axis_right,
         "concat": {"spacing": c.spacing_concat},
         "facet": {"spacing": c.spacing_facet},
         "header": header,
+        "headerColumn": header_top,
+        "headerFacet": header_top,
         "legend": legend,
         "text": {"color": c.color_primary, "fontSize": c.size_small},
         "title": title,
