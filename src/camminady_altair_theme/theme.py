@@ -167,6 +167,9 @@ def build_theme(c: Config) -> ThemeConfig:
     return {"config": config_kwds}
 
 
-@alt.theme.register("camminady", enable=True)
+# Registering does not enable the theme: importing a library should not change
+# global state. Use `alt.theme.enable("camminady")`, which also works without
+# importing this package thanks to the `altair.vegalite.v6.theme` entry point.
+@alt.theme.register("camminady", enable=False)
 def camminady() -> ThemeConfig:
     return build_theme(config)
