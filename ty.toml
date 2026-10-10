@@ -6,5 +6,5 @@ python-version = "3.11"
 include = [
     "src",
     "tests",
-    "development"
+    "create_charts.py",
 ]
