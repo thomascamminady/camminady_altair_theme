@@ -1,5 +1,17 @@
+"""Minimal Altair themes with muted gray text and dashed grid lines.
+
+Importing this module registers two themes with Altair without enabling
+them: ``"camminady"`` (light) and ``"camminady_dark"``. Both are also
+declared as ``altair.vegalite.v6.theme`` entry points, so enabling them
+does not require an import::
+
+    import altair as alt
+
+    alt.theme.enable("camminady")
+"""
+
 from dataclasses import dataclass
-from typing import Literal, LiteralString
+from typing import Final, Literal, LiteralString
 
 import altair as alt
 from altair.theme import (
@@ -28,14 +40,68 @@ FontWeight = Literal[
     900,
 ]
 
+OKABE_ITO: Final[tuple[LiteralString, ...]] = (
+    "#0072b2",  # blue
+    "#e69f00",  # orange
+    "#009e73",  # bluish green
+    "#cc79a7",  # reddish purple
+    "#56b4e9",  # sky blue
+    "#d55e00",  # vermillion
+    "#f0e442",  # yellow
+)
+"""Okabe-Ito palette (without black), ordered blue and orange first.
+
+The themes keep Vega's default ``tableau10`` category palette, in which the
+3rd (red) and 5th (green) colour are nearly indistinguishable with
+deuteranopia. Use this palette when a chart has more than four categories,
+e.g. ``alt.Color("x:N").scale(range=OKABE_ITO)``.
+"""
+
 
 @dataclass
 class Config:
+    """Design tokens from which the theme is built.
+
+    Attributes
+    ----------
+    color_primary
+        Titles, legends and text marks.
+    color_secondary
+        Axis labels, ticks, domain lines, facet labels and subtitles.
+    color_background
+        Background of the whole chart.
+    color_grid
+        Dashed grid lines.
+    color_rule
+        Rule marks, including error bars and boxplot whiskers.
+    font_weight
+        Weight of all text.
+    size_small
+        Font size of labels and text marks.
+    size_medium
+        Font size of axis, legend and facet titles and of subtitles.
+    size_large
+        Font size of chart titles.
+    height
+        Default height of a single view in pixels.
+    width
+        Default width of a single view in pixels.
+    spacing_facet
+        Spacing between facets in pixels.
+    spacing_concat
+        Spacing between concatenated charts in pixels.
+    y_title_offset
+        Distance between the top of the plot area and the baseline of the
+        horizontal y-axis title in pixels.
+    """
+
     color_primary: LiteralString = "dimgray"
     # "gray" (#808080) has a contrast of 3.9:1 on white, below the 4.5:1 that
     # WCAG AA requires for small text such as tick labels; #767676 passes.
     color_secondary: LiteralString = "#767676"
     color_background: LiteralString = "white"
+    color_grid: LiteralString = "#dddddd"
+    color_rule: LiteralString = "black"
     font_weight: FontWeight = "normal"
     size_small: int = 12
     size_medium: int = 14
@@ -48,6 +114,16 @@ class Config:
 
 
 config = Config()
+"""Tokens of the ``"camminady"`` theme, read each time a chart is rendered."""
+
+config_dark = Config(
+    color_primary="#a9a9a9",
+    color_secondary="#8c8c8c",
+    color_background="#1e1e1e",
+    color_grid="#3a3a3a",
+    color_rule="lightgray",
+)
+"""Tokens of the ``"camminady_dark"`` theme."""
 
 
 def build_theme(c: Config) -> ThemeConfig:
@@ -101,6 +177,7 @@ def build_theme(c: Config) -> ThemeConfig:
         "domainColor": c.color_secondary,
         "domainWidth": 1,
         "gridCap": "round",
+        "gridColor": c.color_grid,
         "gridDash": [2, 4],
         "gridWidth": 1,
         "labelColor": c.color_secondary,
@@ -160,6 +237,7 @@ def build_theme(c: Config) -> ThemeConfig:
         "headerColumn": header_top,
         "headerFacet": header_top,
         "legend": legend,
+        "rule": {"color": c.color_rule},
         "text": {"color": c.color_primary, "fontSize": c.size_small},
         "title": title,
         "view": view,
@@ -167,9 +245,16 @@ def build_theme(c: Config) -> ThemeConfig:
     return {"config": config_kwds}
 
 
-# Registering does not enable the theme: importing a library should not change
-# global state. Use `alt.theme.enable("camminady")`, which also works without
-# importing this package thanks to the `altair.vegalite.v6.theme` entry point.
+# Registering does not enable the themes: importing a library should not
+# change global state. Use `alt.theme.enable("camminady")`, which also works
+# without importing this package thanks to the entry points.
 @alt.theme.register("camminady", enable=False)
 def camminady() -> ThemeConfig:
+    """Light theme: gray text and dashed grid lines on white."""
     return build_theme(config)
+
+
+@alt.theme.register("camminady_dark", enable=False)
+def camminady_dark() -> ThemeConfig:
+    """Dark theme: the same layout with light gray text on a dark background."""
+    return build_theme(config_dark)
