@@ -32,7 +32,10 @@ FontWeight = Literal[
 @dataclass
 class Config:
     color_primary: LiteralString = "dimgray"
-    color_secondary: LiteralString = "gray"
+    # "gray" (#808080) has a contrast of 3.9:1 on white, below the 4.5:1 that
+    # WCAG AA requires for small text such as tick labels; #767676 passes.
+    color_secondary: LiteralString = "#767676"
+    color_background: LiteralString = "white"
     font_weight: FontWeight = "normal"
     size_small: int = 12
     size_medium: int = 14
@@ -68,7 +71,6 @@ def build_theme(c: Config) -> ThemeConfig:
         "discreteWidth": c.width,
         "discreteHeight": c.height,
         "strokeWidth": 0,
-        "fill": "white",
     }
     # Facet headers are styled via `header` (not `headerRow` etc.) so that
     # `chart.configure_header(...)` still takes effect for users.
@@ -90,6 +92,9 @@ def build_theme(c: Config) -> ThemeConfig:
         "color": c.color_primary,
         "fontSize": c.size_large,
         "fontWeight": c.font_weight,
+        "subtitleColor": c.color_secondary,
+        "subtitleFontSize": c.size_medium,
+        "subtitleFontWeight": c.font_weight,
     }
     axis: AxisConfigKwds = {
         "domain": True,
@@ -144,6 +149,7 @@ def build_theme(c: Config) -> ThemeConfig:
         "titleFontWeight": c.font_weight,
     }
     config_kwds: ConfigKwds = {
+        "background": c.color_background,
         "axis": axis,
         "axisX": axis_x,
         "axisY": axis_y,
