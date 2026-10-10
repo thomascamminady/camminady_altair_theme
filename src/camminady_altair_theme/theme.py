@@ -160,9 +160,7 @@ def build_theme(c: Config) -> ThemeConfig:
     }
     # Column headers are placed relative to the plot area and would overlap
     # the horizontal y-axis title above it; lift them above that title.
-    header_top: HeaderConfigKwds = {
-        "labelPadding": c.y_title_offset + c.size_medium,
-    }
+    header_top_padding = c.y_title_offset + c.size_medium
     title: TitleConfigKwds = {
         "anchor": "middle",
         "color": c.color_primary,
@@ -234,8 +232,11 @@ def build_theme(c: Config) -> ThemeConfig:
         "concat": {"spacing": c.spacing_concat},
         "facet": {"spacing": c.spacing_facet},
         "header": header,
-        "headerColumn": header_top,
-        "headerFacet": header_top,
+        # Separate dicts: Altair merges user config into a deep copy of the
+        # theme, which preserves shared references, so a shared dict would
+        # make `configure_headerColumn(...)` also change `headerFacet`.
+        "headerColumn": {"labelPadding": header_top_padding},
+        "headerFacet": {"labelPadding": header_top_padding},
         "legend": legend,
         "rule": {"color": c.color_rule},
         "text": {"color": c.color_primary, "fontSize": c.size_small},
