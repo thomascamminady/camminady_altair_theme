@@ -36,6 +36,7 @@ docs = [
 
 [project.entry-points.'altair.vegalite.v6.theme']
 camminady = "camminady_altair_theme.theme:camminady"
+camminady_dark = "camminady_altair_theme.theme:camminady_dark"
 
 
 [tool.pylint.MASTER]
