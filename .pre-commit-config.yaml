@@ -39,6 +39,7 @@ repos:
     hooks:
       - id: ruff
         args: [ --fix, --exit-non-zero-on-fix ]
+      - id: ruff-format
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
@@ -62,9 +63,17 @@ repos:
 
   - repo: local
     hooks:
+      - id: ty-check
+        name: ty-check
+        entry: uv run --frozen ty check
+        language: system
+        types: [ python ]
+        pass_filenames: false
+
+      # `uv run`, not `uvx`: the tests need the project and its dependencies.
       - id: pytest-check
         name: pytest-check
-        entry: uvx pytest
+        entry: uv run --frozen pytest
         language: system
         pass_filenames: false
         always_run: true
