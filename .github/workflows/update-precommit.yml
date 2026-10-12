@@ -6,16 +6,23 @@ on:
     - cron: '0 9 1 * *'
   workflow_dispatch: # Allow manual triggering
 
+# The repository's default token is read-only. Creating the pull request also
+# requires "Allow GitHub Actions to create and approve pull requests" in the
+# repository's Actions settings.
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update-precommit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7  # v10.2.0
 
       - name: Set up Python
         run: uv python install
@@ -37,7 +44,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.verify-changed-files.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: update pre-commit hooks to latest versions'
