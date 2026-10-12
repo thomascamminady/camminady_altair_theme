@@ -40,18 +40,18 @@ include = ["/src", "/tests", "/README.md", "/LICENSE"]
 
 [dependency-groups]
 dev = [
-    "ipykernel>=7.1.0",
+    "ipykernel>=7.3.0",
     "regex>=2024.11.6",
-    "pytest>=8.3.4",
-    "pytest-cov>=6.0.0",
+    "pytest>=8.4.2",
+    "pytest-cov>=6.3.0",
     "rich>=13.9.4",
-    "ruff>=0.14.3",
-    "ty>=0.0.1a25",
+    "ruff>=0.15.20",
+    "ty>=0.0.57",
     "vega-datasets>=0.9.0",
     "vl-convert-python>=1.9.0.post1",
 ]
 docs = [
-    "pdoc>=14.0.0",
+    "pdoc>=14.7.0",
 ]
 
 [project.entry-points.'altair.vegalite.v6.theme']
