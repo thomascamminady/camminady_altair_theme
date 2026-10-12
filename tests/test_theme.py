@@ -7,6 +7,7 @@ explicitly, render charts with vl-convert and check the layout of the
 rendered scenegraph.
 """
 
+import copy
 import functools
 import json
 import re
@@ -44,6 +45,7 @@ Mark = Literal[
     "rule",
     "text",
 ]
+LegendOrient = Literal["top", "right", "bottom", "left", "top-left"]
 
 THEME_NAMES: Final = ("camminady", "camminady_dark")
 CONFIGS: Final = {
@@ -404,6 +406,39 @@ def test_top_legend_does_not_overlap_y_title(config: Config) -> None:
     legend = find_one(items, role="legend", marktype="group")
     title_top, _ = text_top_bottom(find_one(items, text=Y_TITLE))
     assert legend["ay"] + legend["height"] < title_top
+
+
+def legend_positions(spec: Json) -> list[tuple[float, float]]:
+    legends = find(scene(spec), role="legend", marktype="group")
+    return [(legend["ax"], legend["ay"]) for legend in legends]
+
+
+@pytest.mark.parametrize("orient", ["right", "bottom", "left", "top-left"])
+def test_other_legends_keep_the_vega_layout(orient: LegendOrient) -> None:
+    # The theme replaces Vega's legend layout to offset top legends only.
+    # Two legends also cover their arrangement: stacked on the left and
+    # right, side by side at the bottom.
+    chart = base("point").encode(
+        x="x:Q",
+        y="y:Q",
+        color=alt.Color("series:N").legend(orient=orient),
+        size=alt.Size("y:Q").legend(orient=orient),
+    )
+    themed = spec_with(chart, Config())
+    vega_layout = copy.deepcopy(themed)
+    del vega_layout["config"]["legend"]["layout"]
+    assert legend_positions(themed) == legend_positions(vega_layout)
+
+
+def test_legend_offset_set_by_the_user_takes_precedence() -> None:
+    def top_legend_y(offset: int) -> float:
+        chart = line().encode(
+            color=alt.Color("series:N").legend(orient="top", offset=offset)
+        )
+        [(_, y)] = legend_positions(spec_with(chart, Config()))
+        return y
+
+    assert top_legend_y(0) - top_legend_y(50) == 50
 
 
 @pytest.mark.parametrize("config", CONFIGS.values(), ids=CONFIGS.keys())
