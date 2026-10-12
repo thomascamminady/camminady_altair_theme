@@ -17,9 +17,10 @@ repos:
     hooks:
       - id: pyupgrade
         name: pyupgrade (.py files)
+        args: [ '--py311-plus' ]
 
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.9.0
+    rev: 0.9.1
     hooks:
       - id: nbstripout
         name: nbstripout (.ipynb files)
@@ -28,29 +29,27 @@ repos:
     rev: 1.9.1
     hooks:
       - id: nbqa-pyupgrade
-        args: [ '--py39-plus' ]
+        args: [ '--py311-plus' ]
         name: pyupgrade (.ipynb files)
       - id: nbqa-ruff
         name: ruff (.ipynb files)
         args: [ "--fix", "--exit-non-zero-on-fix" ]
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.14.13'
+  # Keep in sync with the ruff version in uv.lock.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.17.0'
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: [ --fix, --exit-non-zero-on-fix ]
       - id: ruff-format
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
-    rev: 0.9.26
+    rev: 0.12.23
     hooks:
       - id: uv-lock
         name: uv-lock
         description: Update uv.lock file
-      - id: uv-export
-        name: uv-export
-        description: Export requirements for compatibility
 
   - repo: local
     hooks:
