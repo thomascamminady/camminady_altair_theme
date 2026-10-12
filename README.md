@@ -7,6 +7,8 @@ end of each axis. It comes in a light (`camminady`) and a dark
 
 ![Single Chart](https://raw.githubusercontent.com/thomascamminady/camminady_altair_theme/main/assets/single_chart.png)
 
+<!-- docs-start -->
+
 ## Installation
 
 ```bash
