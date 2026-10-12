@@ -101,7 +101,9 @@ class Config:
     color_secondary: LiteralString = "#767676"
     color_background: LiteralString = "white"
     color_grid: LiteralString = "#dddddd"
-    color_rule: LiteralString = "black"
+    # Vega's default rule colour is black, which stands out against the gray
+    # text; dimgray matches the titles and has a contrast of 5.5:1.
+    color_rule: LiteralString = "dimgray"
     font_weight: FontWeight = "normal"
     size_small: int = 12
     size_medium: int = 14
@@ -121,9 +123,12 @@ config_dark = Config(
     color_secondary="#8c8c8c",
     color_background="#1e1e1e",
     color_grid="#3a3a3a",
-    color_rule="lightgray",
+    color_rule="#a9a9a9",
 )
 """Tokens of the ``"camminady_dark"`` theme."""
+
+VEGA_LEGEND_OFFSET: Final = 18
+"""Vega's default distance between a legend and the plot in pixels."""
 
 
 def build_theme(c: Config) -> ThemeConfig:
@@ -211,14 +216,24 @@ def build_theme(c: Config) -> ThemeConfig:
     axis_right: AxisConfigKwds = {
         "titleAlign": "right",
     }
+    # Legends with orient="top" are placed relative to the plot area and
+    # ignore the y-axis title above it, so they need a larger offset than
+    # legends on the other sides. Vega supports offsets per orient only in
+    # its legend `layout`, which Vega-Lite accepts as an expression. That
+    # replaces Vega's default layout, so its other values are repeated.
+    # Offsets set on a legend or via `configure_legend` take precedence.
+    legend_top_offset = c.y_title_offset + c.size_medium + 5
+    legend_layout = (
+        f"{{offset: {VEGA_LEGEND_OFFSET}, direction: 'horizontal', "
+        "left: {direction: 'vertical'}, right: {direction: 'vertical'}, "
+        f"top: {{offset: {legend_top_offset}}}}}"
+    )
     legend: LegendConfigKwds = {
         "labelColor": c.color_primary,
         "labelFontSize": c.size_small,
         "labelFontWeight": c.font_weight,
         "labelLimit": 0,
-        # Legends with orient="top" are placed relative to the plot area and
-        # ignore the y-axis title above it; offset them past that title.
-        "offset": c.y_title_offset + c.size_medium + 5,
+        "layout": {"expr": legend_layout},
         "titleColor": c.color_primary,
         "titleFontSize": c.size_medium,
         "titleFontWeight": c.font_weight,
