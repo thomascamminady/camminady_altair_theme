@@ -27,6 +27,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/thomascamminady/camminady_altair_theme"
+Documentation = "https://camminady.dev/camminady_altair_theme/"
 Repository = "https://github.com/thomascamminady/camminady_altair_theme"
 Issues = "https://github.com/thomascamminady/camminady_altair_theme/issues"
 

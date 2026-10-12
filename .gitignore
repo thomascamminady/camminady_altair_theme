@@ -171,3 +171,6 @@ data/.gitkeep
 data/
 poetry.toml
 ideation/
+
+# pdoc output, built and deployed by the Docs workflow
+/docs/

@@ -2,6 +2,9 @@
 
 Enable a theme with ``alt.theme.enable("camminady")``. Importing this package
 registers the themes but does not enable them.
+
+.. include:: ../../README.md
+   :start-after: <!-- docs-start -->
 """
 
 from importlib.metadata import version
