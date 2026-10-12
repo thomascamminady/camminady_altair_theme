@@ -11,9 +11,10 @@ ASSETS = Path(__file__).parent / "assets"
 def main() -> None:
     # The theme is found through its entry point; no import is needed.
     alt.theme.enable("camminady")
+    # Pass the mark to the constructor rather than calling `.mark_line()`:
+    # with altair >= 6.3, ty cannot infer the return type of that method.
     base = (
-        alt.Chart(data.stocks())
-        .mark_line(strokeWidth=3)
+        alt.Chart(data.stocks(), mark=alt.MarkDef("line", strokeWidth=3))
         .encode(
             x="date:T",
             y="price:Q",
